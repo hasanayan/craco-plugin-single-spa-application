@@ -18,7 +18,7 @@
     "create-react-app"
   ],
   "author": "hasanayan",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/hasanayan/craco-plugin-single-spa-application/issues"
   },
