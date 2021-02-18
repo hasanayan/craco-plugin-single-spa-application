@@ -3,7 +3,13 @@ const path = require("path");
 module.exports = {
   overrideWebpackConfig: ({
     webpackConfig,
-    pluginOptions: { orgName, projectName, entry, orgPackagesAsExternal },
+    pluginOptions: {
+      orgName,
+      projectName,
+      entry,
+      orgPackagesAsExternal,
+      reactPackagesAsExternal,
+    },
     context: { env },
   }) => {
     if (typeof orgName !== "string") {
@@ -26,16 +32,15 @@ module.exports = {
 
     delete webpackConfig.optimization;
 
-    const defaultExternals = [
-      "single-spa",
-      "single-spa-react",
-      "react",
-      "react-dom",
-    ];
-    webpackConfig.externals =
-      orgPackagesAsExternal !== false
-        ? [...defaultExternals, new RegExp(`^@${orgName}/`)]
-        : defaultExternals;
+    let externals = ["single-spa", "single-spa-react"];
+
+    if (reactPackagesAsExternal !== false)
+      externals = [...externals, "react", "react-dom"];
+
+    if (orgPackagesAsExternal === true)
+      externals = [...externals, new RegExp(`^@${orgName}/`)];
+
+    webpackConfig.externals = externals;
 
     removeUrlLoaderLimits(webpackConfig);
     disableCSSExtraction(webpackConfig);
@@ -55,7 +60,6 @@ module.exports = {
 
     cracoConfig.devServer = cracoConfig.devServer || {};
     cracoConfig.devServer.historyApiFallback = true;
-    cracoConfig.devServer.firewall = false;
     cracoConfig.devServer.compress = true;
     cracoConfig.devServer.headers = {
       ...cracoConfig.devServer.headers,

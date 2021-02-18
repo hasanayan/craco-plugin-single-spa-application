@@ -1,6 +1,6 @@
 # craco-plugin-single-spa-application
-Convert your CRA4 project into a single-spa application without ejecting and losing update support of react-scripts
 
+Convert your CRA4 project into a single-spa application without ejecting and losing update support of react-scripts
 
 ![](https://img.shields.io/npm/v/craco-plugin-single-spa-application.svg?style=flat)
 ![](https://img.shields.io/npm/dt/craco-plugin-single-spa-application.svg?style=flat)
@@ -25,7 +25,8 @@ module.exports = {
         orgName: "my-org",
         projectName: "my-app",
         entry: "src/single-spa-index.tsx", //defaults to src/index.js,
-        orgPackagesAsExternal: false // defaults to false. marks packages that has @my-org prefix as excluded so they are not included in the bundle
+        orgPackagesAsExternal: false // defaults to false. marks packages that has @my-org prefix as external so they are not included in the bundle
+        reactPackagesAsExternal: true // defaults to true. marks react and react-dom as external so they are not included in the bundle
       },
     }]
 }
@@ -43,7 +44,7 @@ module.exports = {
     ...
 ```
 
-3. Run ```npm run craco:build``` to generate your microfrontend app bundle. It will be located under build folder and named as my-org-my-app.js
+3. Run `npm run craco:build` to generate your microfrontend app bundle. It will be located under build folder and named as my-org-my-app.js
 
 ## License
 
