@@ -44,7 +44,7 @@ module.exports = {
     ...
 ```
 
-3. Run `npm run craco:build` to generate your microfrontend app bundle. It will be located under build folder and named as my-org-my-app.js
+3. Run `npm run craco:build` to generate your microfrontend app bundle. The output will be located under build folder and named as my-org-my-app.js
 
 ## License
 
