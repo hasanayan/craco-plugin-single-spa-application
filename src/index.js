@@ -32,7 +32,7 @@ module.exports = {
 
     delete webpackConfig.optimization;
 
-    let externals = ["single-spa", "single-spa-react"];
+    let externals = ["single-spa"];
 
     if (reactPackagesAsExternal !== false)
       externals = [...externals, "react", "react-dom"];
