@@ -1,4 +1,5 @@
 const path = require("path");
+const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
 
 module.exports = {
   overrideWebpackConfig: ({
@@ -42,14 +43,15 @@ module.exports = {
 
     webpackConfig.externals = externals;
 
-    removeUrlLoaderLimits(webpackConfig);
     disableCSSExtraction(webpackConfig);
-    disableSVGExtraction(webpackConfig);
 
     return webpackConfig;
   },
 
-  overrideCracoConfig: ({ cracoConfig, pluginOptions }) => {
+  overrideCracoConfig: ({
+    cracoConfig,
+    pluginOptions: { orgName, projectName, rootDirectoryLevel },
+  }) => {
     if (!cracoConfig.webpack) cracoConfig.webpack = {};
     if (!cracoConfig.webpack.plugins) cracoConfig.webpack.plugins = {};
     if (!cracoConfig.webpack.plugins.remove)
@@ -57,6 +59,14 @@ module.exports = {
 
     cracoConfig.webpack.plugins.remove.push("HtmlWebpackPlugin");
     cracoConfig.webpack.plugins.remove.push("MiniCssExtractPlugin");
+
+    cracoConfig.webpack.plugins.add = [
+      ...(cracoConfig.webpack.plugins.add || []),
+      new SystemJSPublicPathPlugin({
+        systemjsModuleName: `@${orgName}/${projectName}`,
+        rootDirectoryLevel: rootDirectoryLevel,
+      }),
+    ];
 
     cracoConfig.devServer = cracoConfig.devServer || {};
     cracoConfig.devServer.historyApiFallback = true;

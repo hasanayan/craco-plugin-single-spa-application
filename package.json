@@ -1,6 +1,6 @@
 {
   "name": "craco-plugin-single-spa-application",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Convert your CRA4 project into a single-spa application without ejecting or losing update support of react-scripts",
   "main": "src/index.js",
   "scripts": {
@@ -24,7 +24,8 @@
   },
   "homepage": "https://github.com/hasanayan/craco-plugin-single-spa-application#readme",
   "dependencies": {
-    "@craco/craco": "^6.0.0"
+    "@craco/craco": "^6.0.0",
+    "systemjs-webpack-interop": "^2.3.5"
   },
   "devDependencies": {
     "react-scripts": "^4.0.2"
