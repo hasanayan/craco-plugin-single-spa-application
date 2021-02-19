@@ -10,6 +10,7 @@ module.exports = {
       entry,
       orgPackagesAsExternal,
       reactPackagesAsExternal,
+      externals: userExternals = [],
     },
     context: { env },
   }) => {
@@ -33,7 +34,7 @@ module.exports = {
 
     delete webpackConfig.optimization;
 
-    let externals = ["single-spa"];
+    let externals = ["single-spa", ...userExternals];
 
     if (reactPackagesAsExternal !== false)
       externals = [...externals, "react", "react-dom"];
