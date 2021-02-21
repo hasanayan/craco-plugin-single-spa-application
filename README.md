@@ -49,4 +49,4 @@ module.exports = {
 
 ## License
 
-Licensed under the MIT License, Copyright ©️ 2021 Hasan Ayan. See [LICENSE.md](LICENSE.md) for more information.
+Licensed under the MIT License, Copyright ©️ 2021 Hasan Ayan. See [LICENSE.md](LICENSE) for more information.
