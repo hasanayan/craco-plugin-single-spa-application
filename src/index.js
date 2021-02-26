@@ -1,5 +1,6 @@
 const path = require("path");
 const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
+const systemjsInterop = require("systemjs-webpack-interop/webpack-config");
 
 module.exports = {
   overrideWebpackConfig: ({
@@ -11,6 +12,7 @@ module.exports = {
       orgPackagesAsExternal,
       reactPackagesAsExternal,
       externals: userExternals = [],
+      minimize = false,
     },
     context: { env },
   }) => {
@@ -32,7 +34,18 @@ module.exports = {
     webpackConfig.output.devtoolNamespace = projectName;
     webpackConfig.output.publicPath = "";
 
-    delete webpackConfig.optimization;
+    webpackConfig.optimization.minimize = minimize;
+    webpackConfig.optimization.namedModules = true;
+    webpackConfig.optimization.namedChunks = true;
+
+    webpackConfig.optimization.splitChunks = {
+      chunks: "async",
+      cacheGroups: { default: false },
+    };
+
+    delete webpackConfig.optimization.runtimeChunk;
+
+    webpackConfig.module.rules.push({ parser: { system: false } });
 
     let externals = ["single-spa", ...userExternals];
 
@@ -45,6 +58,8 @@ module.exports = {
     webpackConfig.externals = externals;
 
     disableCSSExtraction(webpackConfig);
+
+    systemjsInterop.checkWebpackConfig(webpackConfig);
 
     return webpackConfig;
   },
@@ -81,57 +96,15 @@ module.exports = {
   },
 };
 
-const removeUrlLoaderLimits = (webpackConfig) => {
-  webpackConfig.module.rules[1].oneOf.forEach((rule) => {
-    if (rule.use) {
-      rule.use.forEach((x) => {
-        if (x.options && x.options.limit) delete x.options.limit;
-      });
-    }
-
-    if (rule.options && rule.options.limit) delete rule.options.limit;
-  });
-};
-
 const disableCSSExtraction = (webpackConfig) => {
   webpackConfig.module.rules[1].oneOf.forEach((x) => {
     if (!x.use) return;
-    x.use.forEach((use) => {
-      if (!use.loader) return;
-      use.loader = use.loader.replace(
-        "mini-css-extract-plugin/dist/loader.js",
-        "style-loader/dist/cjs.js"
-      );
-    });
+
+    if (Array.isArray(x.use)) {
+      x.use.forEach((use) => {
+        if (use.loader?.includes("mini-css-extract-plugin"))
+          use.loader = require.resolve("style-loader/dist/cjs.js");
+      });
+    }
   });
-};
-
-const disableSVGExtraction = (webpackConfig) => {
-  const svgTest = /\.svg$/;
-
-  const svgLoader = JSON.parse(
-    JSON.stringify(webpackConfig.module.rules[1].oneOf[2])
-  );
-
-  svgLoader.test = svgTest;
-  svgLoader.use = [
-    {
-      loader: svgLoader.loader,
-      options: svgLoader.options,
-    },
-    {
-      loader: "url-loader",
-      options: {
-        limit: undefined,
-      },
-    },
-  ];
-
-  delete svgLoader.loader;
-  delete svgLoader.options;
-
-  webpackConfig.module.rules[1].oneOf = [
-    svgLoader,
-    ...webpackConfig.module.rules[1].oneOf,
-  ];
 };
