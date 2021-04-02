@@ -104,6 +104,7 @@ const disableCSSExtraction = (webpackConfig) => {
       x.use.forEach((use) => {
         if (use.loader && use.loader.includes("mini-css-extract-plugin"))
           use.loader = require.resolve("style-loader/dist/cjs.js");
+          delete use.options
       });
     }
   });
