@@ -31,8 +31,16 @@ module.exports = {
     webpackConfig.entry = path.resolve(entry || "src/index.js");
     webpackConfig.output.filename = `${orgName}-${projectName}.js`;
     webpackConfig.output.libraryTarget = "system";
-    webpackConfig.output.devtoolNamespace = projectName;
+    webpackConfig.output.jsonpFunction = `webpackJsonp_${projectName}`;
+    webpackConfig.output.crossOriginLoading = "anonymous";
+    webpackConfig.output.devtoolNamespace = `${orgName}-${projectName}`;
     webpackConfig.output.publicPath = "";
+
+    // for wp4
+    webpackConfig.resolve.alias = {
+      ...webpackConfig.resolve.alias,
+      "single-spa-react/parcel": "single-spa-react/lib/esm/parcel.js",
+    };
 
     webpackConfig.optimization.minimize = minimize;
     webpackConfig.optimization.namedModules = true;
