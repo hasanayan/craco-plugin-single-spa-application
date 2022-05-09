@@ -2,6 +2,30 @@ const path = require("path");
 const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
 const systemjsInterop = require("systemjs-webpack-interop/webpack-config");
 
+const buildExternals = (webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal) => {
+  const externals = [];
+
+  if (webpackConfig.externals) {
+    if (Array.isArray(webpackConfig.externals)) {
+      externals.push(...webpackConfig.externals);
+    } else {
+      externals.push(webpackConfig.externals);
+    }
+  }
+
+  externals.push("single-spa");
+
+  if (!!reactPackagesAsExternal) {
+    externals.push("react", "react-dom");
+  }
+
+  if (!!orgPackagesAsExternal) {
+    externals.push(new RegExp(`^@${orgName}/`));
+  }
+
+  return externals;
+}
+
 module.exports = {
   overrideWebpackConfig: ({
     webpackConfig,
@@ -11,7 +35,6 @@ module.exports = {
       entry,
       orgPackagesAsExternal,
       reactPackagesAsExternal,
-      externals: userExternals = [],
       minimize = false,
     },
     context: { env },
@@ -47,15 +70,7 @@ module.exports = {
 
     webpackConfig.module.rules.push({ parser: { system: false } });
 
-    let externals = ["single-spa", ...userExternals];
-
-    if (reactPackagesAsExternal !== false)
-      externals = [...externals, "react", "react-dom"];
-
-    if (orgPackagesAsExternal === true)
-      externals = [...externals, new RegExp(`^@${orgName}/`)];
-
-    webpackConfig.externals = externals;
+    webpackConfig.externals = buildExternals(webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal);
 
     disableCSSExtraction(webpackConfig);
 
