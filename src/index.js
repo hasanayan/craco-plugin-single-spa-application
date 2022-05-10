@@ -1,6 +1,33 @@
 const path = require("path");
 const SystemJSPublicPathPlugin = require("systemjs-webpack-interop/SystemJSPublicPathWebpackPlugin");
 const systemjsInterop = require("systemjs-webpack-interop/webpack-config");
+const webpack = require("webpack");
+
+const getWebpackMajorVersion = () => webpack.version.split(".")[0];
+
+const buildOptimizations = (webpackConfig, minimize) => {
+  const optimization = {
+    ...webpackConfig.optimization,
+    minimize,
+    splitChunks: {
+      chunks: "async",
+      cacheGroups: { default: false },
+    }
+  }
+
+  const webpackMajorVersion = getWebpackMajorVersion();
+  if (webpackMajorVersion < 5) {
+    optimization.namedModules = true;
+    optimization.namedChunks = true;
+  } else {
+    optimization.moduleIds = "named";
+    optimization.chunkIds = "named";
+  }
+
+  delete optimization.runtimeChunk;
+
+  return optimization;
+}
 
 module.exports = {
   overrideWebpackConfig: ({
@@ -35,16 +62,7 @@ module.exports = {
     webpackConfig.output.devtoolNamespace = projectName;
     webpackConfig.output.publicPath = "";
 
-    webpackConfig.optimization.minimize = minimize;
-    webpackConfig.optimization.namedModules = true;
-    webpackConfig.optimization.namedChunks = true;
-
-    webpackConfig.optimization.splitChunks = {
-      chunks: "async",
-      cacheGroups: { default: false },
-    };
-
-    delete webpackConfig.optimization.runtimeChunk;
+    webpackConfig.optimization = buildOptimizations(webpackConfig, minimize);
 
     webpackConfig.module.rules.push({ parser: { system: false } });
 

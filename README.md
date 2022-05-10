@@ -1,6 +1,6 @@
 # craco-plugin-single-spa-application
 
-Convert your CRA4 project into a single-spa application without ejecting and losing update support of react-scripts
+Convert your CRA project into a single-spa application without ejecting and losing update support of react-scripts
 
 ![](https://img.shields.io/npm/v/craco-plugin-single-spa-application.svg?style=flat)
 ![](https://img.shields.io/npm/dt/craco-plugin-single-spa-application.svg?style=flat)
