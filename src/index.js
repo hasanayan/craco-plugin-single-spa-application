@@ -36,6 +36,7 @@ module.exports = {
       orgPackagesAsExternal,
       reactPackagesAsExternal,
       minimize = false,
+      outputFilename,
     },
     context: { env },
   }) => {
@@ -52,7 +53,7 @@ module.exports = {
     }
 
     webpackConfig.entry = path.resolve(entry || "src/index.js");
-    webpackConfig.output.filename = `${orgName}-${projectName}.js`;
+    webpackConfig.output.filename = outputFilename || `${orgName}-${projectName}.js`;
     webpackConfig.output.libraryTarget = "system";
     webpackConfig.output.devtoolNamespace = projectName;
     webpackConfig.output.publicPath = "";
