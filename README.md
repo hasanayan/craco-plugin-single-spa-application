@@ -15,7 +15,7 @@ npm install craco-plugin-single-spa-application --save-dev
 
 1. Add the plugin into your craco.config.js;
 
-```
+```typescript
 singleSpaApplicationPlugin = require('craco-plugin-single-spa-application');
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
 
 2. Update the scripts section of your package.json as follows:
 
-```
+```json
   ...
   "scripts": {
     "start": "react-scripts start",
