@@ -1,7 +1,7 @@
 {
   "name": "craco-plugin-single-spa-application",
-  "version": "1.0.9",
-  "description": "Convert your CRA4 project into a single-spa application without ejecting or losing update support of react-scripts",
+  "version": "2.0.0",
+  "description": "Convert your CRA project into a single-spa application without ejecting or losing update support of react-scripts",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,10 +14,14 @@
     "single-spa",
     "craco",
     "cra4",
+    "cra5",
     "cra",
     "create-react-app"
   ],
   "author": "hasanayan",
+  "contributors": [
+    "felipeplets"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/hasanayan/craco-plugin-single-spa-application/issues"
