@@ -20,10 +20,10 @@ npm install craco-plugin-single-spa-application --save-dev
 1. Open the `craco.config.js` file and apply the following changes:
 
 ```typescript
-singleSpaApplicationPlugin = require('craco-plugin-single-spa-application');
+const SingleSpaAppcracoPlugin = require('craco-plugin-single-spa-application');
 
-const singleSpaApplicationPlugin = {
-  plugin: singleSpaApplicationPlugin,
+const singleSpaAppPlugin = {
+  plugin: SingleSpaAppcracoPlugin,
   options: {
     orgName: "my-org",
     projectName: "my-app",
@@ -37,7 +37,7 @@ const singleSpaApplicationPlugin = {
 
 // Keep any other configuration you are exporting from CRACO and add the plugin to the plugins array
 module.exports = {
-    plugins: [singleSpaApplicationPlugin]
+    plugins: [singleSpaAppPlugin]
 }
 ```
 
