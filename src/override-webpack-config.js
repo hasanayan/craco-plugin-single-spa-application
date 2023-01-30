@@ -27,7 +27,7 @@ const buildOptimizations = (webpackMajorVersion, webpackConfig, minimize) => {
   return optimization;
 }
 
-const buildExternals = (webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal) => {
+const buildExternals = (webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal, orgName) => {
   const externals = [];
 
   if (webpackConfig.externals) {
@@ -99,7 +99,7 @@ const overrideWebpackConfig = ({
 
   const webpackMajorVersion = getWebpackMajorVersion();
   webpackConfig.optimization = buildOptimizations(webpackMajorVersion, webpackConfig, minimize);
-  webpackConfig.externals = buildExternals(webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal);
+  webpackConfig.externals = buildExternals(webpackConfig, reactPackagesAsExternal, orgPackagesAsExternal, orgName);
 
   // Reference: https://github.com/systemjs/systemjs#compatibility-with-webpack
   if (webpackMajorVersion < 5) {
